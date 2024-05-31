@@ -3,9 +3,8 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import tensorflow as tf
 import os
 
-# Assuming the current working directory is `C:\Users\berku\OneDrive\Documents\IBuniversal\LinkedinLearning__Face_and_Image_Recognition\src\codes`
-# Define the absolute path to the model file
-model_path = r'C:\Users\berku\OneDrive\Documents\IBuniversal\LinkedinLearning__Face_and_Image_Recognition\emotion_model.h5'
+# Define the relative path to the model file
+model_path = os.path.join(os.path.dirname(__file__), '..', '..', 'emotion_model.h5')
 
 # Load the trained model from the file
 model = tf.keras.models.load_model(model_path)
@@ -22,12 +21,7 @@ def preprocess_image(image_path):
     return img_array
 
 # Path to the test image
-# Update this path to point to one of the images in your test directory
-test_image_path = r'C:\Users\berku\OneDrive\Documents\IBuniversal\LinkedinLearning__Face_and_Image_Recognition\input\images\test\happy\80.jpg'  # Replace with your actual test image path
-#test_image_path = r'C:\Users\berku\OneDrive\Documents\IBuniversal\LinkedinLearning__Face_and_Image_Recognition\input\images\external\me.jpg'  # Replace with your actual test image path
-#test_image_path = r'C:\Users\berku\OneDrive\Documents\IBuniversal\LinkedinLearning__Face_and_Image_Recognition\input\images\external\stefan.jpg'  # Replace with your actual test image path
-#test_image_path = r'C:\Users\berku\OneDrive\Documents\IBuniversal\LinkedinLearning__Face_and_Image_Recognition\input\images\external\vicky.jpg'  # Replace with your actual test image path
-
+test_image_path = os.path.join(os.path.dirname(__file__), '..', '..', 'input', 'images', 'test', 'happy', '80.jpg')  # Replace with your actual test image path
 
 # Preprocess the test image
 test_image = preprocess_image(test_image_path)
