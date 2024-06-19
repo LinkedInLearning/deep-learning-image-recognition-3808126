@@ -1,5 +1,5 @@
-# Deep Learning: Face and Image Recognition
-This is the repository for the LinkedIn Learning course Deep Learning: Face and Image Recognition. The full course is available from [LinkedIn Learning][lil-course-url].
+# Deep Learning: Image Recognition
+This is the repository for the LinkedIn Learning course Deep Learning: Image Recognition. The full course is available from [LinkedIn Learning][lil-course-url].
 
 _See the readme file in the main branch for updated instructions and information._
 ## Instructions
