@@ -78,15 +78,12 @@ def explain_convolution():
     filter = np.array([[1, 0],
                        [0, -1]], dtype=float).reshape(2, 2, 1, 1)
 
-    # Apply convolution operation
-    conv_layer = Conv2D(1, (2, 2), activation='linear', input_shape=(3, 3, 1), use_bias=False)
-    conv_layer.build((1, 3, 3, 1))  # Build the layer to initialize weights
-    conv_layer.set_weights([filter])
-    conv_output = conv_layer.predict(image)
+    # Perform convolution operation using tf.nn.conv2d
+    conv_output = tf.nn.conv2d(image, filter, strides=[1, 1, 1, 1], padding='VALID')
 
     print("Input Image:\n", image.reshape(3, 3))
     print("Filter:\n", filter.reshape(2, 2))
-    print("Convolution Output:\n", conv_output.reshape(2, 2))
+    print("Convolution Output:\n", conv_output.numpy().reshape(2, 2))
 
 # Explain convolution operation
 explain_convolution()
@@ -104,7 +101,7 @@ def explain_pooling():
     pool_output = pool_layer(image)
 
     print("Input Image:\n", image.reshape(4, 4))
-    print("Max Pooling Output:\n", pool_output.reshape(2, 2))
+    print("Max Pooling Output:\n", pool_output.numpy().reshape(2, 2))
 
 # Explain pooling operation
 explain_pooling()
