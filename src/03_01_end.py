@@ -1,19 +1,21 @@
 # 03_01_end.py
 
-# Building an Advanced CNN Model and Using Transfer Learning
-
+# Import necessary libraries
 import os
-import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow.keras.datasets import cifar10
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
-from tensorflow.keras.applications import VGG16
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Input, GlobalAveragePooling2D
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, BatchNormalization
+
+# Disable oneDNN custom operations
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
+# Ensure TensorFlow uses CPU only
+os.environ['CUDA_VISIBLE_DEVICES'] = ''
+import tensorflow as tf
+tf.config.set_visible_devices([], 'GPU')
 
 # Load the CIFAR-10 dataset
 (X_train, y_train), (X_test, y_test) = cifar10.load_data()
@@ -26,73 +28,83 @@ X_test = X_test.astype('float32') / 255
 y_train = to_categorical(y_train, 10)
 y_test = to_categorical(y_test, 10)
 
-# Data Augmentation
-datagen = ImageDataGenerator(
-    rotation_range=15,
-    width_shift_range=0.1,
-    height_shift_range=0.1,
-    horizontal_flip=True,
-)
+# Define the labels of the dataset
+labels = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
-# Fit the data generator to the training data
-datagen.fit(X_train)
+# Print the shapes of the datasets to verify transformations
+print(f"X_train shape: {X_train.shape}")  # Should be (50000, 32, 32, 3)
+print(f"y_train shape after one-hot encoding: {y_train.shape}")  # Should be (50000, 10)
+print(f"X_test shape: {X_test.shape}")  # Should be (10000, 32, 32, 3)
+print(f"y_test shape after one-hot encoding: {y_test.shape}")  # Should be (10000, 10)
 
-# Function to create an advanced CNN model using Transfer Learning with VGG16
-def create_advanced_cnn_model():
-    # Load the VGG16 model with pre-trained weights, excluding the top layers
-    base_model = VGG16(weights='imagenet', include_top=False, input_shape=(32, 32, 3))
+# Function to display a sample of images from the dataset
+def display_images(images, labels, y_data, rows=4, cols=4):
+    fig, axes = plt.subplots(rows, cols, figsize=(10, 10))
+    axes = axes.ravel()
+    for i in np.arange(0, rows * cols):
+        index = np.random.randint(0, len(images))
+        axes[i].imshow(images[index])
+        label_index = np.argmax(y_data[index])  # Get the index of the label
+        axes[i].set_title(labels[label_index])
+        axes[i].axis('off')
+    plt.subplots_adjust(hspace=0.5)
+    plt.show()
 
-    # Freeze the layers of the base model
-    for layer in base_model.layers:
-        layer.trainable = False
+# Display a sample of training images with their labels
+display_images(X_train, labels, y_train)
 
-    # Add custom top layers
-    x = base_model.output
-    x = GlobalAveragePooling2D()(x)
-    x = Dense(512, activation='relu')(x)
-    x = Dropout(0.5)(x)
-    predictions = Dense(10, activation='softmax')(x)
+# Define a function to illustrate a simple CNN architecture
+def illustrate_simple_cnn():
+    model = Sequential([
+        Conv2D(32, (3, 3), activation='relu', input_shape=(32, 32, 3)),
+        MaxPooling2D((2, 2)),
+        Flatten(),
+        Dense(64, activation='relu'),
+        Dense(10, activation='softmax')
+    ])
+    model.summary()
 
-    # Create the full model
-    model = Model(inputs=base_model.input, outputs=predictions)
-    return model
+# Illustrate a simple CNN architecture
+illustrate_simple_cnn()
 
-# Create the advanced CNN model
-model = create_advanced_cnn_model()
+# Define a function to explain convolution operation
+def explain_convolution():
+    # Create a simple 3x3 image with a single channel
+    image = np.array([[0, 1, 2],
+                      [2, 2, 0],
+                      [1, 0, 1]], dtype=float).reshape(1, 3, 3, 1)
 
-# Compile the model with Adam optimizer and categorical crossentropy loss function
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    # Define a simple 2x2 filter
+    filter = np.array([[1, 0],
+                       [0, -1]], dtype=float).reshape(2, 2, 1, 1)
 
-# Print the model summary to understand its architecture
-model.summary()
+    # Apply convolution operation
+    conv_layer = Conv2D(1, (2, 2), activation='linear', input_shape=(3, 3, 1), use_bias=False)
+    conv_layer.build((1, 3, 3, 1))  # Build the layer to initialize weights
+    conv_layer.set_weights([filter])
+    conv_output = conv_layer.predict(image)
 
-# Train the model on the training data using data augmentation
-history = model.fit(datagen.flow(X_train, y_train, batch_size=64), epochs=20, validation_data=(X_test, y_test))
+    print("Input Image:\n", image.reshape(3, 3))
+    print("Filter:\n", filter.reshape(2, 2))
+    print("Convolution Output:\n", conv_output.reshape(2, 2))
 
-# Evaluate the model on the test data to get the loss and accuracy
-test_loss, test_accuracy = model.evaluate(X_test, y_test)
-print(f"Test accuracy: {test_accuracy}")
+# Explain convolution operation
+explain_convolution()
 
-# Ensure the output directory exists
-output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../output'))
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
+# Define a function to explain pooling operation
+def explain_pooling():
+    # Create a simple 4x4 image with a single channel
+    image = np.array([[1, 2, 1, 0],
+                      [0, 1, 3, 1],
+                      [2, 2, 0, 0],
+                      [1, 0, 1, 3]], dtype=float).reshape(1, 4, 4, 1)
 
-# Save the trained model to the output directory
-model_path = os.path.join(output_dir, 'cifar10_advanced_model.h5')
-model.save(model_path)
+    # Apply max pooling operation
+    pool_layer = MaxPooling2D((2, 2))
+    pool_output = pool_layer(image)
 
-# Check if the model file is created
-if os.path.isfile(model_path):
-    print(f"Model saved successfully at {model_path}")
-else:
-    print("Failed to save the model.")
+    print("Input Image:\n", image.reshape(4, 4))
+    print("Max Pooling Output:\n", pool_output.reshape(2, 2))
 
-# Plot the training and validation accuracy over epochs
-plt.plot(history.history['accuracy'], label='accuracy')
-plt.plot(history.history['val_accuracy'], label='val_accuracy')
-plt.xlabel('Epoch')
-plt.ylabel('Accuracy')
-plt.ylim([0, 1])
-plt.legend(loc='lower right')
-plt.show()
+# Explain pooling operation
+explain_pooling()
