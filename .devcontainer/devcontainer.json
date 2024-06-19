@@ -29,5 +29,5 @@
 	],
 	"remoteUser": "vscode",
 	"onCreateCommand": "echo PS1='\"$ \"' >> ~/.bashrc", //Set Terminal Prompt to $
-	"postCreateCommand": "sh .devcontainer/startup.sh"
+	"postCreateCommand": "pip install -r requirements.txt && sh .devcontainer/startup.sh"
 }
