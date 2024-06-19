@@ -8,3 +8,5 @@ notebook
 tqdm
 opencv-contrib-python
 scikit-learn
+matplotlib
+os
