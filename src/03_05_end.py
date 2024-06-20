@@ -6,11 +6,10 @@ import matplotlib.pyplot as plt
 from tensorflow.keras.datasets import cifar10
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Activation
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 from sklearn.metrics import classification_report, confusion_matrix
 import seaborn as sns
 import tensorflow as tf
-import cv2
 
 # Disable oneDNN custom operations
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
@@ -90,13 +89,13 @@ print(f"Model saved to {model_path}")
 
 # Challenges Discussion
 # 1. Dealing with Different Lighting Conditions
-# Simulate different lighting conditions by adjusting brightness and contrast.
+# Simulate different lighting conditions by adjusting brightness and contrast using simple scaling.
 
-def adjust_brightness(image, factor):
-    return cv2.convertScaleAbs(image, alpha=factor, beta=0)
+def adjust_brightness_contrast(image, alpha=1.0, beta=0.0):
+    return np.clip(alpha * image + beta, 0, 1)
 
-bright_image = adjust_brightness(X_train[0], 1.5)
-dark_image = adjust_brightness(X_train[0], 0.5)
+bright_image = adjust_brightness_contrast(X_train[0], alpha=1.5)
+dark_image = adjust_brightness_contrast(X_train[0], alpha=0.5)
 
 plt.figure(figsize=(6, 3))
 plt.subplot(1, 2, 1)
@@ -108,7 +107,7 @@ plt.title('Dark Image')
 plt.show()
 
 # 2. Handling Occlusions
-# Simulate occlusions by adding a black rectangle to the image.
+# Simulate occlusions by adding a black rectangle to the image using NumPy.
 
 def add_occlusion(image, x, y, width, height):
     occluded_image = image.copy()
@@ -122,21 +121,20 @@ plt.title('Occluded Image')
 plt.show()
 
 # 3. Scale Variations
-# Show examples of images at different scales.
+# Show examples of images at different scales using tf.image.
 
 def rescale_image(image, scale):
-    height, width = image.shape[:2]
-    return cv2.resize(image, (int(width * scale), int(height * scale)))
+    return tf.image.resize(image, (int(image.shape[0] * scale), int(image.shape[1] * scale)))
 
 scaled_image_1 = rescale_image(X_train[0], 0.5)
 scaled_image_2 = rescale_image(X_train[0], 1.5)
 
 plt.figure(figsize=(6, 3))
 plt.subplot(1, 2, 1)
-plt.imshow(scaled_image_1)
+plt.imshow(scaled_image_1.numpy())
 plt.title('Scaled Down Image')
 plt.subplot(1, 2, 2)
-plt.imshow(scaled_image_2)
+plt.imshow(scaled_image_2.numpy())
 plt.title('Scaled Up Image')
 plt.show()
 
@@ -159,14 +157,15 @@ def display_similar_images(images, labels, class_name_1, class_name_2):
     class_indices_1 = [i for i, label in enumerate(labels) if label == class_name_1]
     class_indices_2 = [i for i, label in enumerate(labels) if label == class_name_2]
     
-    plt.figure(figsize=(6, 3))
+    plt.figure(figsize=(10, 5))
     for i in range(5):
         plt.subplot(2, 5, i+1)
         plt.imshow(images[class_indices_1[i]])
-        plt.title(class_name_1)
+        plt.title('Cat' if class_name_1 == 3 else 'Dog')
         plt.subplot(2, 5, i+6)
         plt.imshow(images[class_indices_2[i]])
-        plt.title(class_name_2)
+        plt.title('Cat' if class_name_2 == 3 else 'Dog')
+    plt.suptitle('Similarity between Cat and Dog Images')
     plt.show()
 
 # Example: Cat and Dog images
