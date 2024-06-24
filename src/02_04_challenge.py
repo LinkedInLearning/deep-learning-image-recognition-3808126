@@ -35,8 +35,18 @@ print(f"y_train shape after one-hot encoding: {y_train.shape}")  # Should be (50
 print(f"X_test shape: {X_test.shape}")  # Should be (10000, 32, 32, 3)
 print(f"y_test shape after one-hot encoding: {y_test.shape}")  # Should be (10000, 10)
 
-# Function to display a sample of images from the dataset
-def display_images(images, labels, y_data, rows=4, cols=4):
+# Define the output directory
+output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../output'))
+
+# Define the plot directory within the output directory
+plot_path = os.path.join(output_dir, 'plots')
+
+# Create the directory if it doesn't exist
+if not os.path.exists(plot_path):
+    os.makedirs(plot_path)
+
+# Function to display a sample of images from the dataset and save the plot
+def display_images(images, labels, y_data, rows=4, cols=4, save_path=None):
     fig, axes = plt.subplots(rows, cols, figsize=(10, 10))
     axes = axes.ravel()
     for i in np.arange(0, rows * cols):
@@ -46,10 +56,16 @@ def display_images(images, labels, y_data, rows=4, cols=4):
         axes[i].set_title(labels[label_index])
         axes[i].axis('off')
     plt.subplots_adjust(hspace=0.5)
+    if save_path:
+        plt.savefig(save_path)
+        print(f'Plot saved to {save_path}')
     plt.show()
 
-# Display a sample of training images with their labels
-display_images(X_train, labels, y_train)
+# Define the file path to save the plot
+plot_file = os.path.join(plot_path, 'display_images.png')
+
+# Display a sample of training images with their labels and save the plot
+display_images(X_train, labels, y_train, save_path=plot_file)
 
 # Define an enhanced CNN model with an additional convolutional layer
 def create_enhanced_plus_cnn_model():
