@@ -132,6 +132,12 @@ else:
     plt.ylabel('Accuracy')
     plt.ylim([0, 1])
     plt.legend(loc='lower right')
+
+    # Save the plot to a file
+    plot_file = os.path.join(plot_path, '02_03_end_enhanced_model.png')
+    plt.savefig(plot_file)
+    print(f'Plot saved to {plot_file}')
+    
     plt.show()
 
 # Evaluate the model on the test data to get the loss and accuracy
