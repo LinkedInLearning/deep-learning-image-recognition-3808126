@@ -35,8 +35,22 @@ print(f"y_train shape after one-hot encoding: {y_train.shape}")  # Should be (50
 print(f"X_test shape: {X_test.shape}")  # Should be (10000, 32, 32, 3)
 print(f"y_test shape after one-hot encoding: {y_test.shape}")  # Should be (10000, 10)
 
+# Define the output directory
+output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../output'))
+
+# Ensure the output directory exists
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+# Define the plot directory within the output directory
+plot_path = os.path.join(output_dir, 'plots')
+
+# Create the directory if it doesn't exist
+if not os.path.exists(plot_path):
+    os.makedirs(plot_path)
+
 # Define a function to display a sample of images from the dataset
-def display_images(images, y_data, rows=4, cols=4, title="Images"):
+def display_images(images, y_data, rows=4, cols=4, title="Images", save_path=None):
     labels = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
     fig, axes = plt.subplots(rows, cols, figsize=(10, 10))
     fig.suptitle(title)
@@ -48,10 +62,16 @@ def display_images(images, y_data, rows=4, cols=4, title="Images"):
         axes[i].set_title(labels[label_index])
         axes[i].axis('off')
     plt.subplots_adjust(hspace=0.5)
+    if save_path:
+        plt.savefig(save_path)
+        print(f'Plot saved to {save_path}')
     plt.show()
 
-# Display a sample of training images with their labels
-display_images(X_train, y_train, title="Before Augmentation")
+# Define the file path to save the plot for original images
+original_images_plot_file = os.path.join(plot_path, '03_02_original_images.png')
+
+# Display a sample of training images with their labels and save the plot
+display_images(X_train, y_train, title="Before Augmentation", save_path=original_images_plot_file)
 
 # Image Data Augmentation
 datagen = ImageDataGenerator(
@@ -68,7 +88,7 @@ datagen = ImageDataGenerator(
 datagen.fit(X_train)
 
 # Define a function to visualize augmented images
-def visualize_augmented_images(datagen, images, y_data, rows=4, cols=4, title="Augmented Images"):
+def visualize_augmented_images(datagen, images, y_data, rows=4, cols=4, title="Augmented Images", save_path=None):
     labels = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
     fig, axes = plt.subplots(rows, cols, figsize=(10, 10))
     fig.suptitle(title)
@@ -80,8 +100,14 @@ def visualize_augmented_images(datagen, images, y_data, rows=4, cols=4, title="A
             axes[i].set_title(labels[label_index])
             axes[i].axis('off')
         plt.subplots_adjust(hspace=0.5)
+        if save_path:
+            plt.savefig(save_path)
+            print(f'Plot saved to {save_path}')
         plt.show()
         break  # We only want to visualize one batch
 
+# Define the file path to save the plot for augmented images
+augmented_images_plot_file = os.path.join(plot_path, '03_02_augmented_images.png')
+
 # Visualize augmented images
-visualize_augmented_images(datagen, X_train, y_train, title="After Augmentation")
+visualize_augmented_images(datagen, X_train, y_train, title="After Augmentation", save_path=augmented_images_plot_file)
