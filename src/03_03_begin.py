@@ -39,7 +39,8 @@ def display_images(images, labels, rows=4, cols=4):
         axes[i].set_title(labels[y_train[i].argmax()])
         axes[i].axis('off')
     plt.subplots_adjust(hspace=0.5)
-    plt.show()
+    plt.show()  # Show the plot
+    plt.close(fig)  # Close the figure after showing it
 
 # Display images to see the dataset
 display_images(X_train, labels)

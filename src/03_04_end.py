@@ -78,7 +78,8 @@ if os.path.isfile(model_path):
     # Save the confusion matrix plot to a file
     plt.savefig(conf_matrix_plot_file)
     print(f'Confusion matrix plot saved to {conf_matrix_plot_file}')
-    plt.show()
+    plt.show()  # Show the plot
+    plt.close(fig)  # Close the figure after showing it
 
     # Save the evaluated model to the output directory
     model.save(model_path)

@@ -61,7 +61,8 @@ def display_images(images, labels, y_data, rows=4, cols=4, save_path=None):
     if save_path:
         plt.savefig(save_path)
         print(f'Plot saved to {save_path}')
-    plt.show()
+    plt.show()  # Show the plot
+    plt.close(fig)  # Close the figure after showing it
 
 # Define the file path to save the plot
 plot_file = os.path.join(plot_path, 'display_images.png')
