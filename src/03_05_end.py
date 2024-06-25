@@ -31,6 +31,16 @@ y_test = to_categorical(y_test, 10)
 
 labels = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
+# Define the output directory
+output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../output'))
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+# Define the plot directory within the output directory
+plot_path = os.path.join(output_dir, 'plots')
+if not os.path.exists(plot_path):
+    os.makedirs(plot_path)
+
 # Define a CNN model with detailed explanations for challenges
 def create_cnn_model():
     model = Sequential([
@@ -72,6 +82,9 @@ sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=labels, 
 plt.xlabel('Predicted')
 plt.ylabel('True')
 plt.title('Confusion Matrix')
+conf_matrix_path = os.path.join(plot_path, '03_05_confusion_matrix.png')
+plt.savefig(conf_matrix_path)
+print(f'Confusion matrix plot saved to {conf_matrix_path}')
 plt.show()
 
 # Classification Report
@@ -79,10 +92,6 @@ class_report = classification_report(y_true, y_pred_classes, target_names=labels
 print("Classification Report:\n", class_report)
 
 # Save the model if needed
-output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../output'))
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
-
 model_path = os.path.join(output_dir, 'cifar10_challenge_model.h5')
 model.save(model_path)
 print(f"Model saved to {model_path}")
@@ -104,6 +113,9 @@ plt.title('Bright Image')
 plt.subplot(1, 2, 2)
 plt.imshow(dark_image)
 plt.title('Dark Image')
+lighting_conditions_path = os.path.join(plot_path, '03_05_lighting_conditions.png')
+plt.savefig(lighting_conditions_path)
+print(f'Lighting conditions plot saved to {lighting_conditions_path}')
 plt.show()
 
 # 2. Handling Occlusions
@@ -118,6 +130,9 @@ occluded_image = add_occlusion(X_train[0], 8, 8, 16, 16)
 
 plt.imshow(occluded_image)
 plt.title('Occluded Image')
+occlusion_path = os.path.join(plot_path, '03_05_occluded_image.png')
+plt.savefig(occlusion_path)
+print(f'Occluded image plot saved to {occlusion_path}')
 plt.show()
 
 # 3. Scale Variations
@@ -136,6 +151,9 @@ plt.title('Scaled Down Image')
 plt.subplot(1, 2, 2)
 plt.imshow(scaled_image_2.numpy())
 plt.title('Scaled Up Image')
+scale_variations_path = os.path.join(plot_path, '03_05_scale_variations.png')
+plt.savefig(scale_variations_path)
+print(f'Scale variations plot saved to {scale_variations_path}')
 plt.show()
 
 # 4. Dealing with Class Imbalance
@@ -146,6 +164,9 @@ plt.bar(labels, class_counts)
 plt.title('Class Distribution')
 plt.xlabel('Class')
 plt.ylabel('Count')
+class_distribution_path = os.path.join(plot_path, '03_05_class_distribution.png')
+plt.savefig(class_distribution_path)
+print(f'Class distribution plot saved to {class_distribution_path}')
 plt.show()
 
 # Techniques to handle class imbalance include oversampling, undersampling, and using class weights during training.
@@ -166,6 +187,9 @@ def display_similar_images(images, labels, class_name_1, class_name_2):
         plt.imshow(images[class_indices_2[i]])
         plt.title('Cat' if class_name_2 == 3 else 'Dog')
     plt.suptitle('Similarity between Cat and Dog Images')
+    similar_images_path = os.path.join(plot_path, '03_05_similar_images.png')
+    plt.savefig(similar_images_path)
+    print(f'Similar images plot saved to {similar_images_path}')
     plt.show()
 
 # Example: Cat and Dog images
