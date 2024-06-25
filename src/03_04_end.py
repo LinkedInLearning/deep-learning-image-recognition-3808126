@@ -36,6 +36,16 @@ if not os.path.exists(output_dir):
 # Define the model path
 model_path = os.path.join(output_dir, 'cifar10_system_model.h5')
 
+# Define the plot directory within the output directory
+plot_path = os.path.join(output_dir, 'plots')
+
+# Create the directory if it doesn't exist
+if not os.path.exists(plot_path):
+    os.makedirs(plot_path)
+
+# Define the file path to save the confusion matrix plot
+conf_matrix_plot_file = os.path.join(plot_path, '03_04_confusion_matrix.png')
+
 # Check if the model already exists
 if os.path.isfile(model_path):
     # Load the pre-trained model
@@ -64,6 +74,10 @@ if os.path.isfile(model_path):
     plt.xlabel('Predicted')
     plt.ylabel('True')
     plt.title('Confusion Matrix')
+    
+    # Save the confusion matrix plot to a file
+    plt.savefig(conf_matrix_plot_file)
+    print(f'Confusion matrix plot saved to {conf_matrix_plot_file}')
     plt.show()
 
     # Save the evaluated model to the output directory
