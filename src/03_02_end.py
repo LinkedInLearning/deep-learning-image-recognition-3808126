@@ -66,7 +66,7 @@ def display_images(images, y_data, rows=4, cols=4, title="Images", save_path=Non
         plt.savefig(save_path)
         print(f'Plot saved to {save_path}')
     plt.show()  # Show the plot
-    plt.close(fig)  # Close the figure after showing it
+    plt.close()  # Close the figure after showing it
 
 # Define the file path to save the plot for original images
 original_images_plot_file = os.path.join(plot_path, '03_02_original_images.png')
@@ -105,7 +105,7 @@ def visualize_augmented_images(datagen, images, y_data, rows=4, cols=4, title="A
             plt.savefig(save_path)
             print(f'Plot saved to {save_path}')
         plt.show()  # Show the plot
-    plt.close(fig)  # Close the figure after showing it
+        plt.close()  # Close the figure after showing it
         break  # We only want to visualize one batch
 
 # Define the file path to save the plot for augmented images

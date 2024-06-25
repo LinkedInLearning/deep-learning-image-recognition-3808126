@@ -86,7 +86,7 @@ conf_matrix_path = os.path.join(plot_path, '03_05_confusion_matrix.png')
 plt.savefig(conf_matrix_path)
 print(f'Confusion matrix plot saved to {conf_matrix_path}')
 plt.show()  # Show the plot
-plt.close(fig)  # Close the figure after showing it
+plt.close()  # Close the figure after showing it
 
 # Classification Report
 class_report = classification_report(y_true, y_pred_classes, target_names=labels)
@@ -118,7 +118,7 @@ lighting_conditions_path = os.path.join(plot_path, '03_05_lighting_conditions.pn
 plt.savefig(lighting_conditions_path)
 print(f'Lighting conditions plot saved to {lighting_conditions_path}')
 plt.show()  # Show the plot
-    plt.close(fig)  # Close the figure after showing it
+plt.close()  # Close the figure after showing it
 
 # 2. Handling Occlusions
 # Simulate occlusions by adding a black rectangle to the image using NumPy.
@@ -136,7 +136,7 @@ occlusion_path = os.path.join(plot_path, '03_05_occluded_image.png')
 plt.savefig(occlusion_path)
 print(f'Occluded image plot saved to {occlusion_path}')
 plt.show()  # Show the plot
-    plt.close(fig)  # Close the figure after showing it
+plt.close()  # Close the figure after showing it
 
 # 3. Scale Variations
 # Show examples of images at different scales using tf.image.
@@ -158,7 +158,7 @@ scale_variations_path = os.path.join(plot_path, '03_05_scale_variations.png')
 plt.savefig(scale_variations_path)
 print(f'Scale variations plot saved to {scale_variations_path}')
 plt.show()  # Show the plot
-    plt.close(fig)  # Close the figure after showing it
+plt.close()  # Close the figure after showing it
 
 # 4. Dealing with Class Imbalance
 # Show class distribution and techniques to address imbalance.
@@ -172,7 +172,7 @@ class_distribution_path = os.path.join(plot_path, '03_05_class_distribution.png'
 plt.savefig(class_distribution_path)
 print(f'Class distribution plot saved to {class_distribution_path}')
 plt.show()  # Show the plot
-    plt.close(fig)  # Close the figure after showing it
+plt.close()  # Close the figure after showing it
 
 # Techniques to handle class imbalance include oversampling, undersampling, and using class weights during training.
 
@@ -196,7 +196,7 @@ def display_similar_images(images, labels, class_name_1, class_name_2):
     plt.savefig(similar_images_path)
     print(f'Similar images plot saved to {similar_images_path}')
     plt.show()  # Show the plot
-    plt.close(fig)  # Close the figure after showing it
+    plt.close()  # Close the figure after showing it
 
 # Example: Cat and Dog images
 display_similar_images(X_train, np.argmax(y_train, axis=1), 3, 5)
@@ -217,4 +217,4 @@ noisy_image_path = os.path.join(plot_path, '03_07_noisy_image.png')
 plt.savefig(noisy_image_path)
 print(f'Noisy image plot saved to {noisy_image_path}')
 plt.show()  # Show the plot
-    plt.close(fig)  # Close the figure after showing it
+plt.close()  # Close the figure after showing it

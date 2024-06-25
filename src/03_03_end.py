@@ -127,4 +127,4 @@ else:
     print(f'Plot saved to {plot_file}')
     
     plt.show()  # Show the plot
-    plt.close(fig)  # Close the figure after showing it
+    plt.close()  # Close the figure after showing it

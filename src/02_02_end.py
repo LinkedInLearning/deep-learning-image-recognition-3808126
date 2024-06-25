@@ -64,7 +64,7 @@ def display_images(images, labels, y_data, rows=4, cols=4, save_path=None):
         plt.savefig(save_path)
         print(f'Plot saved to {save_path}')
     plt.show()  # Show the plot
-    plt.close(fig)  # Close the figure after showing it
+    plt.close()  # Close the figure after showing it
 
 # Define the file path to save the plot
 plot_file = os.path.join(plot_path, 'display_images.png')
@@ -130,7 +130,7 @@ else:
     
     plt.show()
 plt.show()  # Show the plot
-    plt.close(fig)  # Close the figure after showing it
+plt.close()  # Close the figure after showing it
 # Evaluate the model on the test data to get the loss and accuracy
 test_loss, test_accuracy = model.evaluate(X_test, y_test)
 print(f"Test accuracy: {test_accuracy}")
