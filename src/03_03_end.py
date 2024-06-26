@@ -79,6 +79,11 @@ output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../output'
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
+# Define the plot directory within the output directory
+plot_path = os.path.join(output_dir, 'plots')
+if not os.path.exists(plot_path):
+    os.makedirs(plot_path)
+
 # Define the model path
 model_path = os.path.join(output_dir, 'cifar10_system_model.h5')
 
